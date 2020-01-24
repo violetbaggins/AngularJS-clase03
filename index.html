@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clase 1 AJS</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+
+    <script src="https://code.angularjs.org/1.7.9/angular-animate.min.js"></script>
+
+
+    <script src="js/controlador.js"></script>
+
+
+</head>
+
+<body ng-app="miApp">
+
+    <div class="container-fluid">
+        <div ng-controller="miCtrl1" ng-init="mostrar=true;contador=123;contador3=789">
+            <div class="jumbotron mt-3">
+
+                <h1>AngularJS - Controlador 1</h1>
+                <br>
+
+                <!-- ----------- -->
+                <!-- EXPRESIONES -->
+                <!-- ----------- -->
+                <h3><u>Expresiones</u></h3>
+                <p>{{ 3 + 4}}</p>
+                <p>{{ mensaje }}</p>
+                <p>{{ numero }}</p>
+                <br>
+
+                <!-- ----------- -->
+                <!--   ng-bind   -->
+                <!-- ----------- -->
+                <h3><u>ng-bind</u></h3>
+                <p ng-bind="mensaje"></p>
+
+                <!-- ----------- -->
+                <!--   ng-show   -->
+                <!-- ----------- -->
+                <h3><u>ng-show / ng-init / ng-click</u></h3>
+
+                <button class="btn btn-success my-2"
+                    ng-click="mostrar=!mostrar">{{mostrar? 'Ocultar':'Mostrar'}}</button>
+
+                <p class="alert alert-info caja" ng-show="mostrar">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam ullam recusandae nesciunt, aliquid
+                    nam officiis earum eos doloremque, sed facere ut expedita ipsa quam fuga, totam aliquam praesentium
+                    eum consequuntur.
+                </p>
+
+                <br>
+                <button class="btn btn-success my-2" ng-click="contador=contador+1">Contar {{contador}} </button>
+
+                <!-- <button class="btn btn-success my-2" ng-click="incrementar()">Contar {{contador2}} </button> -->
+
+                <button class="btn btn-success my-2" ng-click="incrementar()">Contar {{getContador2()}} </button>
+
+                <div class="alert alert-warning">
+                    <p>Contador 3: {{contador3}}</p>
+                    <button class="btn btn-success my-2" ng-click="contador3=contador3-1">DECREMENTAR</button>
+                    <button class="btn btn-success my-2" ng-click="contador3=contador3+1">INCREMENTAR</button>
+                </div>
+
+                <br>
+
+                <!-- ----------- -->
+                <!--  ng-model   -->
+                <!-- ----------- -->
+                <h3><u>ng-model</u></h3>
+                <br>
+
+                <h5>Entrada</h5>
+                <input type="text" ng-model="valor"> {{ valor }}
+                <br><br>
+                <h5>Checkbox</h5>
+                <input type="checkbox" ng-model="check"> {{ check }}
+                <br>
+
+                <!-- ----------- -->
+                <!--  ng-repeat  -->
+                <!-- ----------- -->
+                <h3><u>ng-repeat</u></h3>
+                <br>
+
+                <h5>Array de strings (lista)</h5>
+                <ul>
+                    <li ng-repeat="persona in personas track by $index">
+                        {{ persona }}
+                    </li>
+                </ul>
+                <br>
+
+                <button class="btn btn-warning my-3" ng-click="agregarAlumno()">Agregar Alumno</button>
+
+                <div class="btn btn-danger" ng-hide="alumnos.length">
+                    No se encontraron alumnos!
+                </div>
+                <div ng-show="alumnos.length">
+                    <h5>Array de objetos (lista)</h5>
+                    <ul>
+                        <li ng-repeat="alumno in alumnos track by $index">
+                            <!-- {{ alumno.nombre }} {{ alumno.apellido }} -->
+                            {{ alumno.nombre + ' ' + alumno.apellido }}
+                        </li>
+                    </ul>
+                    <br>
+
+                    <h5>Array de objetos (tabla)</h5>
+                    <!-- Aca va el BUSCADOR -->
+                    <form class="form-inline my-2 my-lg-2">
+                        <input ng-model="busquedaAux" class="form-control mr-sm-2" type="search" placeholder="Nombre"
+                            aria-label="Search">
+                        <button ng-click="busqueda=busquedaAux" class="btn btn-outline-success my-2 my-sm-0"
+                            type="submit">Buscar</button>
+                    </form>
+                    
+                    <!-- <select ng-model="menu" name="" id="" class="form-control w-25 my-3">
+                        <option value="">TODOS</option>
+                        <option value="{{alumno.nombre}}" ng-repeat="alumno in alumnos">{{alumno.nombre}}</option>
+                    </select>
+                    <p>{{menu}}</p> -->
+
+                    <select ng-model="menu" name="" id="" class="form-control w-25 my-3" ng-options="alumno.nombre  disable when !alumno.curso for alumno in alumnos">
+                        <option value="">TODOS</option>
+                    </select>
+                    <p>{{menu.nombre}} {{menu.apellido}} {{menu.edad}}</p>
+
+                    <div ng-show="campo!=''" class="alert alert-success">
+                        La tabla está ordenada en forma {{!inverso? 'DESCENDENTE': 'ASCENDENTE'}} por el campo
+                        {{ campo | uppercase }}
+                    </div>
+                    <table class="table">
+                        <tr class="bg-success text-white">
+                            <th ng-click="ordenar('nombre')">Nombre</th>
+                            <th ng-click="ordenar('apellido')">Apellido</th>
+                            <th ng-click="ordenar('edad')">Edad</th>
+                            <th ng-click="ordenar('curso')">Curso</th>
+                            <th ng-click="ordenar('cuota')">Cuota</th>
+                            <th ng-click="ordenar('altura')">Altura</th>
+                            <th ng-click="ordenar('foto')">FotoURL</th>
+                            <th ng-click="ordenar('foto')">Foto</th>
+                        </tr>
+                        <tr class="bg-info text-white"
+                            ng-repeat="alumno in alumnos | limitTo:10 | orderBy:orden | filter:{nombre: menu.nombre} as buscar track by $index">
+                            <td>{{ alumno.nombre | lowercase }}</td>
+                            <td>{{ alumno.apellido | uppercase }}</td>
+                            <td>{{ alumno.edad }}</td>
+                            <td>{{ alumno.curso? 'Si':'No' }}</td>
+                            <td>{{ alumno.cuota | currency }}</td>
+                            <td>{{ alumno.altura | number:1 }}</td>
+                            <td>{{ alumno.foto | acortar:8 | capitalize }}</td>
+                            <td><img ng-src="{{ alumno.foto }}" width="50" alt="foto de {{ alumno.nombre }}"></td>
+                        </tr>
+                    </table>
+
+                    <div ng-show="buscar.length==0" class="alert alert-danger">No se encontraron resultados para esta búsqueda</div>
+
+
+                    <div class="alert alert-info">
+                        <div ng-hide="cantidadAlumnosCurso().cantidad">
+                            Ningún alumno hizo el curso
+                        </div>
+                        <div ng-show="cantidadAlumnosCurso().cantidad">
+
+                            <div ng-hide="cantidadAlumnosCurso().cantidad == cantidadAlumnosCurso().total">
+                                {{cantidadAlumnosCurso().cantidad}} de {{cantidadAlumnosCurso().total}} alumnos hicieron
+                                el curso
+                            </div>
+
+                            <div ng-show="cantidadAlumnosCurso().cantidad == cantidadAlumnosCurso().total">
+                                Todos los alumnos hicieron el curso
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br>
+                    <h5>Array de objetos (media)</h5>
+                    <div class="media alert alert-dark" ng-repeat="alumno in alumnos track by $index">
+                        <img ng-src="{{ alumno.foto }}" width="200" alt="foto de {{ alumno.nombre }}">
+                        <div class="media-body ml-3">
+                            <h4>Alumno {{$index+1}}</h4>
+                            <br>
+                            <p>Nombre: <a ng-href="{{alumno.foto}}">{{alumno.nombre}} {{alumno.apellido}}</a></p>
+                            <p>Edad: <i>{{alumno.edad}}</i></p>
+                            <span ng-style="aplicarEstilo(alumno.nombre)">Hizo el curso <input type="checkbox" ng-model="alumno.curso"></span>
+                            <button class="btn btn-danger ml-3" ng-click="borrarAlumno($index)">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div ng-controller="miCtrl2">
+            <div class="jumbotron mt-3">
+
+                <h1>AngularJS - Controlador 2</h1>
+                <br>
+                <p>{{ 3 + 4}}</p>
+                <p>{{ mensaje }}</p>
+
+                <p id="parrafo" class="alert alert-warning">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Modi ratione sequi eligendi sapiente
+                    quisquam, numquam tempore illum cumque voluptas incidunt facere eius voluptatem dolorem sint fugiat,
+                    corrupti placeat quam dolor!
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
